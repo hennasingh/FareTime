@@ -1,4 +1,4 @@
-const val FILEPATH = "src/assets/customers.txt"
+const val FILEPATH = "src/customers.txt"
 
 fun main() {
 
