@@ -30,7 +30,7 @@ object DataRepo {
             }
 
         }
-        val invitedCustomers = calculateDistanceAndReturnClosest(customerList)
+        return calculateDistanceAndReturnClosest(customerList)
     }
 
     private fun jsonStringToObject(jsonString: String) {
