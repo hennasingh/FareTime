@@ -17,23 +17,15 @@ object DataRepo {
     private const val DISTANCE = 100 //in km
 
 
-    private val customerList = ArrayList<Customer>()
+    fun customerStore(fileName: String): List<Customer> {
 
-
-    private fun customerStore(fileName: String): HashMap<Int, String> {
-
-        val inputStream = File(fileName).inputStream()
-
-        inputStream.bufferedReader().useLines { lines-> lines.forEach {
-
-            jsonStringToObject(it)
-            }
-
-        }
-        return calculateDistanceAndReturnClosest(customerList)
+        return File(fileName).readLines()
+            .map { line -> fromJson(line) }
+            .filter { customer -> calculateDistance(customer) <= DISTANCE }
+            .sortedBy { customer -> customer.user_id }
     }
 
-    private fun jsonStringToObject(jsonString: String) {
+    private fun fromJson(jsonString: String): Customer {
 
         val json = JSONObject(jsonString)
 
@@ -42,33 +34,24 @@ object DataRepo {
         val name = json.getString(NAME)
         val longitude = json.getString(LONGITUDE)
 
-        customerList.add(Customer(longitude,latitude,userId,name))
+        return Customer(longitude, latitude, userId, name)
 
     }
 
-    private fun calculateDistanceAndReturnClosest(list: ArrayList<Customer>): HashMap<Int, String> {
+    private fun calculateDistance(customer: Customer): Double {
 
-        val invitedCustomers = HashMap<Int, String>()
+        val latRadians = toRadians(customer.latitude.toDouble())
+        val intercommLatRadians = toRadians(INTERCOMM_LATITUDE)
 
-        for (customer in list) {
-            val latRadians = toRadians(customer.latitude.toDouble())
-            val intercommLatRadians = toRadians(INTERCOMM_LATITUDE)
+        val latDifference = intercommLatRadians - latRadians
+        val longDifference = toRadians(INTERCOMM_LONGITUDE - customer.longitude.toDouble())
 
-            val latDifference = intercommLatRadians - latRadians
-            val longDifference = toRadians(INTERCOMM_LONGITUDE - customer.longitude.toDouble())
-
-            val distanceKm = 2 * EARTH_RADIUS * asin(
-                sqrt(
-                    pow(sin(latDifference / 2), 2.0) + pow(sin(longDifference / 2), 2.0)
-                            * cos(latRadians) * cos(intercommLatRadians)
-                )
+        return 2 * EARTH_RADIUS * asin(
+            sqrt(
+                pow(sin(latDifference / 2), 2.0) + pow(sin(longDifference / 2), 2.0)
+                        * cos(latRadians) * cos(intercommLatRadians)
             )
-
-            if (distanceKm <= DISTANCE) invitedCustomers[customer.user_id] = customer.name
-
-        }
-
-        return invitedCustomers
+        )
 
     }
 }
