@@ -4,30 +4,29 @@ import model.Customer
 import org.json.JSONObject
 import java.io.File
 
-class DataRepo {
-
-    companion object {
+object DataRepo {
 
         private const val LONGITUDE = "longitude"
         private const val USER_ID = "user_id"
         private const val LATITUDE = "latitude"
         private const val NAME = "name"
-    }
+    private const val INTERCOMM_LONGITUDE = -6.257664
+    private const val INTERCOMM_LATITUDE = 53.339428
 
-   private  val customerList = ArrayList<Customer>()
+    private val customerList = ArrayList<Customer>()
 
-    fun customerStore(fileName: String) : ArrayList<Customer>{
+
+    private fun customerStore(fileName: String) {
 
         val inputStream = File(fileName).inputStream()
 
         inputStream.bufferedReader().useLines { lines-> lines.forEach {
 
-            println{it}
             jsonStringToObject(it)
             }
 
         }
-        return customerList
+        calculateDistanceAndReturnClosest(customerList)
     }
 
     private fun jsonStringToObject(jsonString: String) {
@@ -40,6 +39,11 @@ class DataRepo {
         val longitude = json.getString(LONGITUDE)
 
         customerList.add(Customer(longitude,latitude,userId,name))
+
+    }
+
+    private fun calculateDistanceAndReturnClosest(customerList: ArrayList<Customer>): ArrayList<Customer> {
+        
 
     }
 }
