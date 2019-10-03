@@ -7,14 +7,14 @@ import java.lang.Math.*
 
 object DataRepo {
 
-        private const val LONGITUDE = "longitude"
-        private const val USER_ID = "user_id"
-        private const val LATITUDE = "latitude"
-        private const val NAME = "name"
+    private const val LONGITUDE = "longitude"
+    private const val USER_ID = "user_id"
+    private const val LATITUDE = "latitude"
+    private const val NAME = "name"
     private const val INTERCOMM_LONGITUDE = -6.257664
     private const val INTERCOMM_LATITUDE = 53.339428
     private const val EARTH_RADIUS = 6372.8 //in km
-    private const val DISTANCE = 100 //in km
+    private const val DISTANCE = 100.0 //in km
 
 
     fun customerStore(fileName: String): List<Customer> {
@@ -38,6 +38,9 @@ object DataRepo {
 
     }
 
+    /*
+     * Taken from https://rosettacode.org/wiki/Haversine_formula#Kotlin
+     */
     private fun calculateDistance(customer: Customer): Double {
 
         val latRadians = toRadians(customer.latitude.toDouble())
