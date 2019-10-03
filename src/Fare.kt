@@ -1,6 +1,3 @@
-import data.DataRepo
-
-
 const val FILEPATH = "src/assets/customers.txt"
 
 fun main() {

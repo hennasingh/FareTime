@@ -1,5 +1,3 @@
-package model
-
 data class Customer(
     val longitude: String,
     val latitude: String,

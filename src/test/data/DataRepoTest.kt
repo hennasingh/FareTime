@@ -1,6 +1,6 @@
 package test.data
 
-import data.DataRepo
+import DataRepo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
