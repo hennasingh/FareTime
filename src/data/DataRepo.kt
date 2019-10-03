@@ -20,12 +20,12 @@ object DataRepo {
     fun customerStore(fileName: String): List<Customer> {
 
         return File(fileName).readLines()
-            .map { line -> fromJson(line) }
+            .map { line -> parseJson(line) }
             .filter { customer -> calculateDistance(customer) <= DISTANCE }
             .sortedBy { customer -> customer.user_id }
     }
 
-    private fun fromJson(jsonString: String): Customer {
+    private fun parseJson(jsonString: String): Customer {
 
         val json = JSONObject(jsonString)
 
